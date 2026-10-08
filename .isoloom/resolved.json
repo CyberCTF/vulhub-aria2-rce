@@ -1,0 +1,129 @@
+{
+  "generated_by_isoloom": "from isoloom.yml; don't edit: change the spec and run `isoloom generate` (`isoloom check` fails when this file is out of date)",
+  "resolved_version": 1,
+  "name": "vulhub-aria2-rce",
+  "instance": null,
+  "inputs": [],
+  "networks": {
+    "lab": {
+      "cidr": "10.61.37.0/24",
+      "docker_cidr": "10.61.37.0/24",
+      "internet": true,
+      "gateway": null,
+      "gateway_address": "10.61.37.1",
+      "router": null,
+      "controller": "10.61.37.253"
+    }
+  },
+  "reach": [],
+  "machines": {
+    "aria2": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.61.37.10"
+      },
+      "docker_addresses": {
+        "lab": "10.61.37.10"
+      },
+      "services": [
+        {
+          "port": 6800,
+          "name": "web",
+          "http": true,
+          "publish": 6800
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 128,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": false
+    }
+  },
+  "start_order": [
+    "aria2"
+  ],
+  "clones": {},
+  "tools": {},
+  "groups": {},
+  "router": null,
+  "controller": {
+    "addresses": {
+      "lab": "10.61.37.253"
+    }
+  },
+  "published": [
+    {
+      "machine": "aria2",
+      "port": 6800,
+      "host_port": 6800
+    }
+  ],
+  "targets": {
+    "possible": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "generated": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "refused": {},
+    "not_possible": {
+      "hybrid": "only when some machines are containers and others are VMs",
+      "vagrant": "needs `vm:` on aria2",
+      "proxmox": "needs `vm:` on aria2",
+      "cloud-vm": "needs `vm:` on aria2",
+      "external": "needs `external:` on aria2"
+    }
+  },
+  "checks": {
+    "default_position": "networks",
+    "positions": [
+      {
+        "position": "networks",
+        "machine": null,
+        "runner": "isoloom-check",
+        "checks": [
+          {
+            "name": "the RPC port answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://aria2:6800/",
+            "expect": "404",
+            "wait": 60
+          },
+          {
+            "name": "the JSON-RPC interface answers without a secret",
+            "derived": false,
+            "kind": "script",
+            "target": "checks/rpc.sh",
+            "expect": "",
+            "wait": 30
+          }
+        ]
+      }
+    ]
+  },
+  "message": "aria2 1.18.8 listens at http://localhost:6800/jsonrpc, with no secret.\nWhat options does aria2.addUri take, and where can a download be saved?\n"
+}

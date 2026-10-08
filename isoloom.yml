@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# Aria2 Unauthenticated RPC Arbitrary File Write (Vulhub, by phith0n and the Vulhub contributors) as an Isoloom spec:
+# Vulhub's aria2/rce, vendored in app/, run from the published image vulhub/aria2:1.18.8.
+# `isoloom generate`, then `isoloom run docker`.
+version: 1
+name: vulhub-aria2-rce
+
+networks:
+  lab: { cidr: 10.61.37.0/24, internet: true }  # addUri downloads from the player's own server
+
+machines:
+  aria2:
+    networks: { lab: 10 }
+    services: [{ port: 6800, name: web, http: true, publish: 6800 }]
+    resources: { cpus: 1, memory_mb: 128 }
+    docker:
+      image: vulhub/aria2:1.18.8
+
+checks:
+  - name: the RPC port answers
+    http: http://aria2:6800/
+    expect: 404
+    wait: 60
+  - name: the JSON-RPC interface answers without a secret
+    script: checks/rpc.sh
+    wait: 30
+
+message: |
+  aria2 1.18.8 listens at http://localhost:{{ machines.aria2.services.0.publish }}/jsonrpc, with no secret.
+  What options does aria2.addUri take, and where can a download be saved?
