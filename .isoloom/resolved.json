@@ -94,7 +94,8 @@
       "vagrant": "needs `vm:` on aria2",
       "proxmox": "needs `vm:` on aria2",
       "cloud-vm": "needs `vm:` on aria2",
-      "external": "needs `external:` on aria2"
+      "external": "needs `external:` on aria2",
+      "cloud-services": "left out by `targets:`"
     }
   },
   "checks": {
