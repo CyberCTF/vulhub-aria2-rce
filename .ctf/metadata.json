@@ -4,11 +4,5 @@
   "question": "Abuse the open aria2 RPC to write a file that gives you a shell on the server.",
   "category": "NETWORK",
   "difficulty": 2,
-  "evidence_kind": "SECRET",
-  "capabilities": [
-    "unauthenticated-access",
-    "arbitrary-file-write",
-    "json-rpc",
-    "remote-code-execution"
-  ]
+  "evidence_kind": "SECRET"
 }
