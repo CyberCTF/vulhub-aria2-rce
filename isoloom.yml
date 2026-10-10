@@ -5,6 +5,9 @@
 version: 1
 name: vulhub-aria2-rce
 
+# Given by the CyberCTF launcher: this player's flag. Without it the development flag.
+inputs: [CTF_FLAG_MAIN]
+
 networks:
   lab: { cidr: 10.61.37.0/24, internet: true }  # addUri downloads from the player's own server
 
@@ -13,8 +16,11 @@ machines:
     networks: { lab: 10 }
     services: [{ port: 6800, name: web, http: true, publish: 6800 }]
     resources: { cpus: 1, memory_mb: 128 }
+    inputs: [CTF_FLAG_MAIN]
+    volumes: { ctf: /ctf }   # the flag, written by ctf/flag.sh at every start
     docker:
       image: vulhub/aria2:1.18.8
+      init: [ctf/flag.sh]
 
 checks:
   - name: the RPC port answers

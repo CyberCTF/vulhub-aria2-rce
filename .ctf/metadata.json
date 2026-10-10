@@ -1,8 +1,1 @@
-{
-  "title": "Aria2 Unauthenticated RPC Arbitrary File Write",
-  "description": "aria2 1.18.8 running as a daemon with JSON-RPC enabled on port 6800 and no rpc-secret: anyone calls aria2.addUri with a dir and out option, so a file from the player's server is written anywhere the process can write, such as a cron directory.",
-  "question": "Abuse the open aria2 RPC to write a file that gives you a shell on the server.",
-  "category": "NETWORK",
-  "difficulty": 2,
-  "evidence_kind": "SECRET"
-}
+{"title": "Aria2 Unauthenticated RPC Arbitrary File Write", "description": "aria2 1.18.8 running as a daemon with JSON-RPC enabled on port 6800 and no rpc-secret: anyone calls aria2.addUri with a dir and out option, so a file from the player's server is written anywhere the process can write, such as a cron directory.", "question": "Abuse the unauthenticated aria2 RPC to write a file that gives you command execution and read /ctf/flag.", "category": "NETWORK", "difficulty": 2, "evidence_kind": "SECRET"}

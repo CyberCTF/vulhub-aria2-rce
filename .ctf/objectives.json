@@ -1,0 +1,63 @@
+{
+  "objectives": [
+    {
+      "key": "main",
+      "title": "Read the flag",
+      "prompt": "Use aria2's open JSON-RPC interface to write a file that gives you command execution, then read /ctf/flag.",
+      "check": {
+        "evidence": "SECRET",
+        "format": "FLAG{%s}"
+      },
+      "dev": "FLAG{dev-vulhub-aria2-rce}",
+      "hints": [
+        "aria2 1.18.8 exposes JSON-RPC on port 6800 with no secret token; read the aria2 manual for aria2.addUri and its dir and out options.",
+        "Think about which files on a Linux system get executed automatically once written. The flag is at /ctf/flag."
+      ],
+      "steps": [
+        {
+          "key": "version",
+          "title": "Identify the product",
+          "prompt": "Which version of aria2 does the server run? (number only)",
+          "check": {
+            "answer_regex": "1\\.18\\.8"
+          }
+        },
+        {
+          "key": "method",
+          "title": "Find the method",
+          "prompt": "Which RPC method downloads a URL to a path of your choice? (method name)",
+          "check": {
+            "answer": [
+              "aria2.adduri",
+              "adduri"
+            ]
+          }
+        },
+        {
+          "key": "option",
+          "title": "Find the option",
+          "prompt": "Which option of that method chooses the target directory? (option name)",
+          "check": {
+            "answer": [
+              "dir"
+            ]
+          }
+        },
+        {
+          "key": "class",
+          "title": "Name the weakness",
+          "prompt": "Which vulnerability class is this?",
+          "check": {
+            "answer": [
+              "arbitrary file write",
+              "file write",
+              "unauthenticated rpc",
+              "unauthenticated file write",
+              "missing authentication"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
