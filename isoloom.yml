@@ -6,21 +6,29 @@ version: 1
 name: vulhub-aria2-rce
 
 # Given by the CyberCTF launcher: this player's flag. Without it the development flag.
-inputs: [CTF_FLAG_MAIN]
+inputs:
+  CTF_FLAG_MAIN: {}
 
 networks:
-  lab: { cidr: 10.61.37.0/24, internet: true }  # addUri downloads from the player's own server
+  lab: {cidr: 10.61.37.0/24, internet: true}    # addUri downloads from the player's own server
 
 machines:
   aria2:
-    networks: { lab: 10 }
-    services: [{ port: 6800, name: web, http: true, publish: 6800 }]
-    resources: { cpus: 1, memory_mb: 128 }
-    inputs: [CTF_FLAG_MAIN]
-    volumes: { ctf: /ctf }   # the flag, written by ctf/flag.sh at every start
-    docker:
+    networks: {lab: 10}
+    resources: {cpus: 1, memory_mb: 128}
+    volumes: {ctf: /ctf}     # the flag, written by ctf/flag.sh at every start
+    ports:
+      web:
+        port: 6800
+        protocol: http
+        publish: true
+    files:
+      - path: /run/lab/ctf_flag_main
+        input: CTF_FLAG_MAIN
+    setup:
+      - ctf/flag.sh
+    app:
       image: vulhub/aria2:1.18.8
-      init: [ctf/flag.sh]
 
 checks:
   - name: the RPC port answers
@@ -32,5 +40,5 @@ checks:
     wait: 30
 
 message: |
-  aria2 1.18.8 listens at http://localhost:{{ machines.aria2.services.0.publish }}/jsonrpc, with no secret.
+  aria2 1.18.8 listens at {{ machines.aria2.ports.web.url }}jsonrpc, with no secret.
   What options does aria2.addUri take, and where can a download be saved?
